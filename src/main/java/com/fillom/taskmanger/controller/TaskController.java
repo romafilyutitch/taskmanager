@@ -2,9 +2,7 @@ package com.fillom.taskmanger.controller;
 
 import com.fillom.taskmanger.model.Task;
 import com.fillom.taskmanger.model.TaskPriority;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -30,5 +28,40 @@ public class TaskController {
     @GetMapping("/tasks")
     public List<Task> getTasks() {
         return tasks;
+    }
+
+    @GetMapping("/tasks/{id}")
+    public Task findTaskById(@PathVariable Integer id) {
+        return tasks.stream()
+                .filter(tasks -> tasks.getId().equals(id))
+                .findFirst()
+                .get();
+    }
+
+    @PostMapping("/tasks")
+    public Task createTask(@RequestBody Task task) {
+        tasks.add(task);
+        return task;
+    }
+
+    @PutMapping("/tasks/{id}")
+    public Task updateTask(@PathVariable Integer id, @RequestBody Task task) {
+        task.setId(id);
+        Task foundTask = tasks.stream()
+                .filter(existingTask -> task.getId().equals(id))
+                .findFirst()
+                .get();
+        int index = tasks.indexOf(foundTask);
+        tasks.set(index, task);
+        return task;
+    }
+
+    @DeleteMapping("/tasks/{id}")
+    public boolean deleteTask(@PathVariable Integer id) {
+        Task foundTask = tasks.stream()
+                .filter(task -> task.getId().equals(id))
+                .findFirst()
+                .get();
+        return tasks.remove(foundTask);
     }
 }
