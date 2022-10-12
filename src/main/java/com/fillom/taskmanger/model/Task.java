@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Task {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String title;
     private String description;
@@ -22,6 +22,7 @@ public class Task {
     private LocalDateTime createdAt;
     @Column(name = "ENDSAT")
     private LocalDateTime endsAt;
+    @Enumerated(EnumType.STRING)
     private TaskPriority priority;
 
 }
